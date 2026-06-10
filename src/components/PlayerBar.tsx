@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Repeat1, Shuffle, Music2 } from 'lucide-react';
 import { usePlayerStore } from '../store/playerStore';
 import { trackApi } from '../services/api';
@@ -22,6 +22,7 @@ const PlayerBar = () => {
     isShuffle,
     queue,
     queueIndex,
+    seekId,
     setPlaying,
     setProgress,
     setDuration,
@@ -32,6 +33,7 @@ const PlayerBar = () => {
     prev,
     next,
     recordHistory,
+    consumeSeekTarget,
   } = usePlayerStore();
 
   useEffect(() => {
@@ -53,15 +55,30 @@ const PlayerBar = () => {
     }
   }, [currentTrack?.id]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    if (!currentTrack) {
+      audio.pause();
+      audio.removeAttribute('src');
+      audio.load();
+      return;
+    }
+    const target = consumeSeekTarget();
+    if (target !== null) {
+      audio.currentTime = target;
+    }
+  }, [seekId, currentTrack, consumeSeekTarget]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
     if (isPlaying) {
       audio.play().catch(() => setPlaying(false));
     } else {
       audio.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack, setPlaying]);
 
   const onTimeUpdate = useCallback(() => {
     if (!isDragging && audioRef.current) {

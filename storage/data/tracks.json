@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "id": "41d67712-ea18-4f7e-8138-0383cf8d51f8",
+    "title": "Go_Time_(Main_Track)_(Full_Length)-Mark_Petrie-223169031-2000",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album",
+    "duration": 136,
+    "filePath": "/Volumes/代码/solo/lp0020/storage/audio/41d67712-ea18-4f7e-8138-0383cf8d51f8.mp3",
+    "fileName": "41d67712-ea18-4f7e-8138-0383cf8d51f8.mp3",
+    "fileSize": 2172225,
+    "mimeType": "audio/mpeg",
+    "createdAt": 1781079925913
+  },
+  {
+    "id": "90527e92-f870-488d-942c-33f2d059a4ed",
+    "title": "Go_Time_(Main_Track)_(Full_Length)-Mark_Petrie-223169031-2000",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album",
+    "duration": 136,
+    "filePath": "/Volumes/代码/solo/lp0020/storage/audio/90527e92-f870-488d-942c-33f2d059a4ed.mp3",
+    "fileName": "90527e92-f870-488d-942c-33f2d059a4ed.mp3",
+    "fileSize": 2172225,
+    "mimeType": "audio/mpeg",
+    "createdAt": 1781079956141
+  },
+  {
+    "id": "30d58ded-05bc-4fd6-bd9e-aea79b4f60ec",
+    "title": "Song-Three",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album",
+    "duration": 136,
+    "filePath": "/Volumes/代码/solo/lp0020/storage/audio/30d58ded-05bc-4fd6-bd9e-aea79b4f60ec.mp3",
+    "fileName": "30d58ded-05bc-4fd6-bd9e-aea79b4f60ec.mp3",
+    "fileSize": 2172225,
+    "mimeType": "audio/mpeg",
+    "createdAt": 1781081779566
+  },
+  {
+    "id": "69672e7b-6c23-4d6e-a5c5-dfba45d4d429",
+    "title": "Song-Four",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album",
+    "duration": 136,
+    "filePath": "/Volumes/代码/solo/lp0020/storage/audio/69672e7b-6c23-4d6e-a5c5-dfba45d4d429.mp3",
+    "fileName": "69672e7b-6c23-4d6e-a5c5-dfba45d4d429.mp3",
+    "fileSize": 2172225,
+    "mimeType": "audio/mpeg",
+    "createdAt": 1781081779591
+  },
+  {
+    "id": "1c0870f0-518f-4909-92f8-2725b0ded221",
+    "title": "Song-Five",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album",
+    "duration": 136,
+    "filePath": "/Volumes/代码/solo/lp0020/storage/audio/1c0870f0-518f-4909-92f8-2725b0ded221.mp3",
+    "fileName": "1c0870f0-518f-4909-92f8-2725b0ded221.mp3",
+    "fileSize": 2172225,
+    "mimeType": "audio/mpeg",
+    "createdAt": 1781081779623
+  }
+]
