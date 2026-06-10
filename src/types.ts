@@ -35,3 +35,4 @@ export interface PlayHistoryItem {
 
 export type RepeatMode = 'off' | 'one' | 'all';
 export type View = 'library' | 'playlists' | 'playlist-detail' | 'upload' | 'history';
+export type SortMode = 'recent' | 'title' | 'duration';

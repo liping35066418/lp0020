@@ -1,22 +1,60 @@
-import { useMemo } from 'react';
-import { Search, Music2, Play, Shuffle } from 'lucide-react';
+import { useMemo, useEffect } from 'react';
+import { Search, Music2, Play, Shuffle, ChevronDown } from 'lucide-react';
 import TrackList from '../components/TrackList';
 import { usePlayerStore } from '../store/playerStore';
+import type { SortMode } from '../types';
+
+const sortLabels: Record<SortMode, string> = {
+  recent: '最近添加',
+  title: '标题 A-Z',
+  duration: '时长长短',
+};
 
 const LibraryPage = () => {
-  const { tracks, searchQuery, setSearchQuery, playTrack, toggleShuffle, isShuffle } = usePlayerStore();
+  const {
+    tracks,
+    searchQuery,
+    setSearchQuery,
+    sortMode,
+    setSortMode,
+    playTrack,
+    toggleShuffle,
+    isShuffle,
+    syncQueueWithList,
+    currentTrack,
+  } = usePlayerStore();
 
-  const filtered = useMemo(() => {
+  const filteredSorted = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return tracks;
-    return tracks.filter((t) =>
-      t.title.toLowerCase().includes(q) ||
-      t.artist.toLowerCase().includes(q) ||
-      t.album.toLowerCase().includes(q)
-    );
-  }, [tracks, searchQuery]);
+    let list = tracks;
+    if (q) {
+      list = list.filter((t) =>
+        t.title.toLowerCase().includes(q) ||
+        t.artist.toLowerCase().includes(q) ||
+        t.album.toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...list];
+    switch (sortMode) {
+      case 'title':
+        sorted.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
+        break;
+      case 'duration':
+        sorted.sort((a, b) => b.duration - a.duration);
+        break;
+      case 'recent':
+      default:
+        sorted.sort((a, b) => b.createdAt - a.createdAt);
+        break;
+    }
+    return sorted;
+  }, [tracks, searchQuery, sortMode]);
 
-  const totalDuration = filtered.reduce((s, t) => s + (t.duration || 0), 0);
+  useEffect(() => {
+    syncQueueWithList(filteredSorted);
+  }, [filteredSorted, syncQueueWithList]);
+
+  const totalDuration = filteredSorted.reduce((s, t) => s + (t.duration || 0), 0);
   const hrs = Math.floor(totalDuration / 3600);
   const mins = Math.floor((totalDuration % 3600) / 60);
 
@@ -46,8 +84,8 @@ const LibraryPage = () => {
             </button>
             <button
               className="btn-primary btn"
-              disabled={filtered.length === 0}
-              onClick={() => playTrack(filtered[0], filtered)}
+              disabled={filteredSorted.length === 0}
+              onClick={() => playTrack(filteredSorted[0], filteredSorted)}
             >
               <Play className="w-4 h-4 fill-current" />
               播放全部
@@ -65,11 +103,23 @@ const LibraryPage = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          <div className="relative">
+            <select
+              className="input pr-8 appearance-none cursor-pointer"
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value as SortMode)}
+            >
+              <option value="recent">最近添加</option>
+              <option value="title">标题 A-Z</option>
+              <option value="duration">时长长短</option>
+            </select>
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'var(--text-muted)' }} />
+          </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <TrackList tracks={filtered} />
+        <TrackList tracks={filteredSorted} />
       </div>
     </div>
   );

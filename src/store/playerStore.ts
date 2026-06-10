@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Track, Playlist, RepeatMode, View } from '../types';
+import type { Track, Playlist, RepeatMode, View, SortMode } from '../types';
 import { trackApi, playlistApi, historyApi } from '../services/api';
 
 interface PlayerState {
@@ -18,6 +18,7 @@ interface PlayerState {
   repeat: RepeatMode;
   isShuffle: boolean;
   searchQuery: string;
+  sortMode: SortMode;
   loading: boolean;
   seekId: number;
   seekTargetTime: number | null;
@@ -37,6 +38,8 @@ interface PlayerState {
   toggleRepeat: () => void;
   toggleShuffle: () => void;
   setSearchQuery: (q: string) => void;
+  setSortMode: (m: SortMode) => void;
+  syncQueueWithList: (list: Track[]) => void;
   consumeSeekTarget: () => number | null;
   addTrackToLibrary: (t: Track) => void;
   deleteTrack: (id: string) => Promise<void>;
@@ -73,6 +76,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   repeat: 'off',
   isShuffle: false,
   searchQuery: '',
+  sortMode: 'recent',
   loading: false,
   seekId: 0,
   seekTargetTime: null,
@@ -227,6 +231,19 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     set({ isShuffle: s, queue: newQueue, queueIndex: newIndex });
   },
   setSearchQuery: (q) => set({ searchQuery: q }),
+  setSortMode: (m) => set({ sortMode: m }),
+  syncQueueWithList: (list) => {
+    const { currentTrack, isShuffle } = get();
+    if (isShuffle) return;
+    if (!currentTrack) {
+      set({ queue: list, queueIndex: 0 });
+      return;
+    }
+    const idx = list.findIndex((t) => t.id === currentTrack.id);
+    if (idx !== -1) {
+      set({ queue: list, queueIndex: idx });
+    }
+  },
 
   addTrackToLibrary: (t) => set({ tracks: [t, ...get().tracks] }),
   deleteTrack: async (id) => {
